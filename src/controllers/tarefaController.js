@@ -1,8 +1,14 @@
 import tarefaModel from "../models/tarefaModel.js";
+
 class TarefaController {
-  getAll = (req, res) => {
-    const tarefas = tarefaModel.getAll();
-    res.json(tarefas);
+  getAll = async(req, res) => {
+    try  {
+      const tarefas = await tarefaModel.getAll();
+      res.json(tarefas);
+    }catch(erro){
+      console.error(erro);
+      res.status(500).json({ erro: "Erro ao recuperar tarefas" });
+    }
   };
   create = ({ body: { descricao } }, res) => {
     if (!descricao) {
