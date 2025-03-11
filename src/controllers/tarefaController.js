@@ -10,12 +10,20 @@ class TarefaController {
       res.status(500).json({ erro: "Erro ao recuperar tarefas" });
     }
   };
-  create = ({ body: { descricao } }, res) => {
-    if (!descricao) {
-      return res.status(400).json({ erro: "Descrição é obrigatória" });
-    }
+  create = (req, res) => {
+    const { descricao } = req.body;
+    try {
+      if (!descricao) {
+        return res.status(400).json({ erro: "Descrição é obrigatória" });
+      }
+      
     const novaTarefa = tarefaModel.create(descricao);
     res.status(201).json(novaTarefa);
+
+    }catch (error) {
+      console.error(error);
+      res.status(500).json({ erro: "Erro ao criar tarefa" });
+    }
   };
   update = ({ params: { id }, body: { concluida } }, res) => {
     const tarefaAtualizada = tarefaModel.update(id, concluida);
